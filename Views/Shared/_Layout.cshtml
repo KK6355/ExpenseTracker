@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ExpenseTracker</title>
+    <title>@*@ViewData["Title"] -*@Expense Tracker</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     @*<link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/20.2.43/material.css" />*@
     <link href="https://cdn.syncfusion.com/ej2/20.2.43/bootstrap5-dark.css" rel="stylesheet" />
@@ -39,6 +39,26 @@
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <main role="main" class="pb-3">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div class="d-flex flex-column mb-5">
+                                <div class="d-flex mb-1">
+                                    <div class="flex-grow-1">
+                                        <h3 class="fw-bold">@ViewData["PageTitle"]</h3>
+                                    </div>
+                                    <div>
+                                        @if (ViewData["PageActionText"] != null)
+                                        {
+                                            <a class="btn btn-success" href="@ViewData["PageActionUrl"]" style="color:white;">
+                                                @ViewData["PageActionText"]
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
+                                <ejs-breadcrumb id="breadcrumb" separatorTemplate="@Html.Raw("<span class='fas fa-angle-right'></span>")" ></ejs-breadcrumb>
+                            </div>
+                        </div>
+                    </div>
                     @RenderBody()
                 </main>
             </div>
