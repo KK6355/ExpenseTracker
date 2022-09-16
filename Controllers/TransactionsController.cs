@@ -46,10 +46,13 @@ namespace ExpenseTracker.Controllers
         //}
 
         // GET: Transactions/AddOrEdit
-        public IActionResult AddOrEdit()
+        public IActionResult AddOrEdit(int id=0)
         {
-            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryId");
-            return View();
+            PopulateCategories();
+            if (id == 0)
+                return View(new Transaction());
+            else
+                return View(_context.Transaction.Find(id));
         }
 
         // POST: Transactions/Create
@@ -61,11 +64,15 @@ namespace ExpenseTracker.Controllers
         {
             if (ModelState.IsValid)
             {
+                if(transaction.TransactionId == 0)
                 _context.Add(transaction);
+                else
+                 _context.Update(transaction);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryId", transaction.CategoryId);
+            //ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryId", transaction.CategoryId);
+            PopulateCategories();
             return View(transaction);
         }
 
@@ -155,7 +162,7 @@ namespace ExpenseTracker.Controllers
             {
                 _context.Transaction.Remove(transaction);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -164,5 +171,14 @@ namespace ExpenseTracker.Controllers
         //{
         //  return (_context.Transaction?.Any(e => e.TransactionId == id)).GetValueOrDefault();
         //}
+        [NonAction] //has nothing with form and db
+        public void PopulateCategories() //create a collection
+        {
+            var CategoryCollection = _context.Category.ToList();
+            Category DefaultCategory = new Category() { CategoryId = 0, Title = "Choose a Category" };
+            CategoryCollection.Insert(0,DefaultCategory);
+            ViewBag.Category = CategoryCollection;
+            
+        }
     }
 }
