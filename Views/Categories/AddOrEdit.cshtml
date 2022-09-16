@@ -26,12 +26,12 @@
                 <div class="mb-3">
                     <ejs-textbox id="Title" name="Title" placeholder="Title" ejs-for="Title" floatLabelType="Always">
                     </ejs-textbox>
-                    <span asp-validation-for="Title" class="text-danger"></span>
+                    <span asp-validation-for="Title" class="text-danger fs-6"></span>
                 </div>
                 <div class="mb-3">
                     <ejs-textbox id="Icon" name="Icon" placeholder="Icon" ejs-for="Icon" floatLabelType="Always">
                     </ejs-textbox>
-                    <span asp-validation-for="Icon" class="text-danger"></span>
+                    <span asp-validation-for="Icon" class="text-danger "></span>
                 </div>
 
                 @*<div class="mb-3">
@@ -53,6 +53,6 @@
     <a asp-action="Index">Back to List</a>
 </div>*@
 
-@section Scripts {
+@*@section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+}*@
