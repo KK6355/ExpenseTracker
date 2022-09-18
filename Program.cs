@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ExpenseTracker.Data;
+using ExpenseTracker.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ExpenseTrackerContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ExpenseTrackerContext") ?? throw new InvalidOperationException("Connection string 'ExpenseTrackerContext' not found.")));

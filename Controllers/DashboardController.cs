@@ -1,7 +1,10 @@
-﻿using ExpenseTracker.Data;
+﻿using System;
+using System.Globalization;
+using Microsoft.AspNetCore.Mvc;
+using ExpenseTracker.Data;
 using ExpenseTracker.Models;
 
-using Microsoft.AspNetCore.Mvc;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Controllers
@@ -26,17 +29,19 @@ namespace ExpenseTracker.Controllers
                 ToListAsync();
             //total income
             int TotalIncome = SelectedTransactions
-                .Where(i=>i.Category.Type == "Income")
-                .Sum(i=>i.Amount);
+                .Where(i => i.Category.Type == "Income")
+                .Sum(j=>j.Amount);
             ViewBag.TotalIncome = TotalIncome.ToString("C0");
             //total expense
             int TotalExpense = SelectedTransactions
                 .Where(i => i.Category.Type == "Expense")
-                .Sum(i => i.Amount);
+                .Sum(j => j.Amount);
             ViewBag.TotalExpense = TotalExpense.ToString("C0");
             //balance
             int Balance = TotalIncome - TotalExpense;
-            ViewBag.Balance = Balance.ToString("C0");
+            CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
+            culture.NumberFormat.CurrencyNegativePattern = 1;
+            ViewBag.Balance = String.Format(culture, "{0:c0}", Balance);
             return View();
         }
     }
