@@ -10,6 +10,9 @@ builder.Services.AddDbContext<ExpenseTrackerContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+//Resigter Syncfusion license
+Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mgo+DSMBMAY9C3t2VVhiQlFaclxJXGFWfVJpTGpQdk5xdV9DaVZUTWY/P1ZhSXxRdkxiUX1ddXZUQWNeVEA=");
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
