@@ -3,7 +3,7 @@ using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
 using ExpenseTracker.Data;
 using ExpenseTracker.Models;
-
+using System.Linq;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -54,12 +54,55 @@ namespace ExpenseTracker.Controllers
                     formattedAmount = k.Sum(j => j.Amount).ToString(),
 
                 }
-                ).ToList() ;
-
+                )
+                .OrderByDescending(j=>j.amount)
+                .ToList() ;
+            //spline Chart - Income VS Exoense
+            //INCOME
+            List<SplineChartData> IncomeSummary = SelectedTransactions
+                .Where(i => i.Category.Type == "Income")
+                .GroupBy(j => j.Date)
+                .Select(k => new SplineChartData()
+                {
+                    day = k.First().Date.ToString("dd-MMM"),
+                    income = k.Sum(j => j.Amount)
+                }
+                ).ToList();
+            //Expense
+            List<SplineChartData> ExpenseSummary = SelectedTransactions
+                .Where(i => i.Category.Type == "Expense")
+                .GroupBy(j => j.Date)
+                .Select(k => new SplineChartData()
+                {
+                    day = k.First().Date.ToString("dd-MMM"),
+                    income = k.Sum(j => j.Amount)
+                }
+                ).ToList();
+            //Combine Income & Expense
+            string[] Last7Days = Enumerable.Range(0,7)
+                .Select(i=> StartDate.AddDays(i).ToString("dd-MMM"))
+                .ToArray();
+            ViewBag.SplineChartData = from day in Last7Days
+                                      join income in IncomeSummary on day equals income.day into dayIncomeJoined
+                                      from income in dayIncomeJoined.DefaultIfEmpty()
+                                      join expense in ExpenseSummary on day equals expense.day into expenseJoined
+                                      from expense in expenseJoined.DefaultIfEmpty()
+                                      select new
+                                      {
+                                          day = day,
+                                          income = income == null ? 0 : income.income,
+                                          expense = expense == null ? 0 : expense.expense,
+                                      };
 
 
 
             return View();
         }
+    }
+    public class SplineChartData
+    {
+        public string day  { get; set; }
+        public int income { get; set; }
+        public int expense { get; set; }
     }
 }
